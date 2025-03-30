@@ -42,5 +42,5 @@ gem 'jektex', '~> 0.1.1'
 gem "bigdecimal"
 gem "base64"
 gem "logger"
-
+gem "jekyll-remote-theme"
 # gemspec
