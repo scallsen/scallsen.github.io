@@ -1,11 +1,14 @@
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 entries:
-  - title: About me
-    entries:
+  - title: Crafting products for 7+ years
+  - title: "Find me on <a href='https://www.linkedin.com/in/scallsen/'>LinkedIn</a>"
+
+#  - title: About me
+#    entries:
 #      - title: Sr. Product Designer @ Shopify
-      - title: Crafting products for 7+ years
-      - title: "Find me on <a href='https://www.linkedin.com/in/scallsen/'>LinkedIn</a>"
+#      - title: Crafting products for 7+ years
+#      - title: "Find me on <a href='https://www.linkedin.com/in/scallsen/'>LinkedIn</a>"
 
 
 #  - title: My projects
