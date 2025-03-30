@@ -1,4 +1,3 @@
-# For documentation on this file, see:
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 entries:
@@ -8,9 +7,13 @@ entries:
       - title: Crafting products for 7+ years
       - title: "Find me on <a href='https://www.linkedin.com/in/scallsen/'>LinkedIn</a>"
 
-  - title: My projects
-    post_list:
-      limit: 5
+
+#  - title: My projects
+#    post_list:
+#      limit: 5
+
+
+# LEAVE ALL BELOW COMMENTED OUT
 #      show_more: true
 #      show_more_text: See more
 #      show_more_url: archive.html
