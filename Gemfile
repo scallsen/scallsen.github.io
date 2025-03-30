@@ -34,6 +34,7 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 gem "webrick", "~> 1.9"
 gem "no-style-please"
+gem 'jektex', '~> 0.1.1'
 
 # gem "kramdown-parser-gfm"
 # gem "webrick"
