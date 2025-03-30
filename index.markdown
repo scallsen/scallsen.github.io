@@ -8,4 +8,3 @@ layout: home
 
 Checking to see how this affects home.
 
-Second line test
