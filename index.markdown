@@ -6,4 +6,6 @@ layout: home
 ---
 ## This is a heading
 
-Checking to see how this affects home
+Checking to see how this affects home.
+
+Second line test
