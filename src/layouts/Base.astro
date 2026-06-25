@@ -16,6 +16,10 @@ const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = A
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      const t = localStorage.getItem('theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    </script>
   </head>
   <body>
     <Nav />
@@ -25,10 +29,36 @@ const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = A
     <footer>
       <div class="container footer-inner">
         <span>© 2024 Your Name</span>
+        <div class="theme-toggle" role="group" aria-label="Color theme">
+          <button data-theme-set="light">light</button>
+          <button data-theme-set="dark">dark</button>
+          <button data-theme-set="auto">auto</button>
+        </div>
       </div>
     </footer>
   </body>
 </html>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-set]');
+  const root = document.documentElement;
+
+  function applyTheme(theme: string) {
+    if (theme === 'auto') {
+      root.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    buttons.forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme));
+    });
+  }
+
+  applyTheme(localStorage.getItem('theme') ?? 'auto');
+  buttons.forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeSet!)));
+</script>
 
 <style>
   main {
@@ -41,8 +71,27 @@ const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = A
   .footer-inner {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 64px;
     font-size: 0.8125rem;
     color: var(--color-muted);
+  }
+  .theme-toggle {
+    display: flex;
+    gap: var(--space-xs);
+  }
+  .theme-toggle button {
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.4;
+  }
+  .theme-toggle button[aria-pressed="true"] {
+    opacity: 1;
+    color: var(--color-text);
   }
 </style>
