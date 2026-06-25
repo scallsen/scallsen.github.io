@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 async function getLastCommitDate(repo: string): Promise<Date | null> {
   try {
@@ -39,17 +41,25 @@ const spotlightProjects = await Promise.all(
     .filter((p) => p.data.spotlight)
     .map(async (p) => {
       const lastCommit = p.data.github ? await getLastCommitDate(p.data.github) : null;
-      return { project: p, freshness: lastCommit ? relativeTime(lastCommit) : null };
+      const hasScreenshot = existsSync(join(process.cwd(), 'public', 'screenshots', `${p.slug}.png`));
+      return { project: p, freshness: lastCommit ? relativeTime(lastCommit) : null, hasScreenshot };
     })
 );
 ---
-<Base title="Your Name — Senior UX Designer">
+<Base title="Simon Callsen — Senior UX Designer">
 
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <h1>Your Name</h1>
-      <p class="hero-title">Senior UX Designer</p>
+      <div class="row">
+        <div class="row-label hero-label">
+          <img src="/pfp.jpeg" alt="Simon Callsen" class="pfp" />
+        </div>
+        <div class="row-content hero-content">
+          <h1>Simon Callsen</h1>
+          <p class="hero-title">Senior UX Designer</p>
+        </div>
+      </div>
       <p class="hero-statement">I design commerce experiences that help merchants grow and customers feel understood.</p>
     </div>
   </section>
@@ -63,11 +73,16 @@ const spotlightProjects = await Promise.all(
             <span class="section-label">Currently Building</span>
           </div>
           <div class="row-content spotlight-grid">
-            {spotlightProjects.map(({ project: p, freshness }) => {
+            {spotlightProjects.map(({ project: p, freshness, hasScreenshot }) => {
               const href = p.data.external ?? `/work/${p.slug}`;
               const isExternal = !!p.data.external;
               return (
                 <a href={href} class="spotlight-card" target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+                  {hasScreenshot && (
+                    <div class="spotlight-preview">
+                      <img src={`/screenshots/${p.slug}.png`} alt={p.data.title} class="spotlight-img" />
+                    </div>
+                  )}
                   <h3 class="spotlight-title">{p.data.title}</h3>
                   {freshness && <span class="spotlight-freshness">{freshness}</span>}
                   <p class="spotlight-desc">{p.data.description}</p>
@@ -154,20 +169,40 @@ const spotlightProjects = await Promise.all(
 <style>
   /* ── Hero ── */
   .hero {
-    padding-top: var(--space-xl);
-    padding-bottom: var(--space-xl);
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-lg);
+  }
+  .hero .row {
+    column-gap: var(--space-md);
+    align-items: center;
+    margin-bottom: 0;
+  }
+  .hero-label {
+    padding: 0;
+  }
+  .pfp {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero .row-content {
+    border-left: none;
+    padding-left: 0;
+    padding-block: 0;
   }
   .hero h1 { margin-bottom: var(--space-xs); }
   .hero-title {
     font-size: 1.25rem;
     color: var(--color-muted);
-    margin-bottom: var(--space-md);
+    margin-bottom: 0;
   }
   .hero-statement {
     font-size: 1.125rem;
     color: var(--color-muted);
-    max-width: 480px;
     line-height: 1.65;
+    padding-left: calc(160px + var(--space-md));
   }
 
   /* ── Full-width section borders ── */
@@ -212,6 +247,14 @@ const spotlightProjects = await Promise.all(
   .personal .row-content :global(.card) {
     padding-left: var(--space-md);
   }
+  .work .row-content :global(.card:first-child),
+  .personal .row-content :global(.card:first-child) {
+    border-top: none;
+  }
+  .work .row-content :global(.card:last-child),
+  .personal .row-content :global(.card:last-child) {
+    border-bottom: none;
+  }
 
   /* ── Currently Building: sub-grid in content column ── */
   .spotlight-grid {
@@ -232,6 +275,20 @@ const spotlightProjects = await Promise.all(
     border-left: 1px solid var(--color-border);
   }
   .spotlight-card:hover .spotlight-cta { opacity: 1; }
+
+  .spotlight-preview {
+    margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-sm);
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+    aspect-ratio: 16 / 9;
+  }
+  .spotlight-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
 
   .spotlight-title {
     font-size: 1rem;

@@ -3,7 +3,7 @@ const { pathname } = Astro.url;
 ---
 <nav>
   <div class="container nav-inner">
-    <a href="/" class="nav-name">Your Name</a>
+    <a href="/" class="nav-name">Simon Callsen</a>
     <ul class="nav-links">
       <li><a href="/#work" class:list={['nav-link', { active: pathname.startsWith('/work') }]}>Work</a></li>
       <li><a href="/about" class:list={['nav-link', { active: pathname === '/about' }]}>About</a></li>
