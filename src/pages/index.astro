@@ -83,10 +83,12 @@ const spotlightProjects = await Promise.all(
                       <img src={`/screenshots/${p.slug}.png`} alt={p.data.title} class="spotlight-img" />
                     </div>
                   )}
-                  <h3 class="spotlight-title">{p.data.title}</h3>
-                  {freshness && <span class="spotlight-freshness">{freshness}</span>}
-                  <p class="spotlight-desc">{p.data.description}</p>
-                  <span class="spotlight-cta">{isExternal ? 'Visit →' : 'View →'}</span>
+                  <div class="spotlight-body">
+                    <h3 class="spotlight-title">{p.data.title}</h3>
+                    {freshness && <span class="spotlight-freshness">{freshness}</span>}
+                    <p class="spotlight-desc">{p.data.description}</p>
+                    <span class="spotlight-cta">{isExternal ? 'Visit →' : 'View →'}</span>
+                  </div>
                 </a>
               );
             })}
@@ -264,12 +266,9 @@ const spotlightProjects = await Promise.all(
   }
 
   .spotlight-card {
-    display: block;
-    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
-  }
-  .spotlight-card:last-child {
-    padding-right: 0;
   }
   .spotlight-card + .spotlight-card {
     border-left: 1px solid var(--color-border);
@@ -277,7 +276,6 @@ const spotlightProjects = await Promise.all(
   .spotlight-card:hover .spotlight-cta { opacity: 1; }
 
   .spotlight-preview {
-    margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-sm);
     overflow: hidden;
     border-bottom: 1px solid var(--color-border);
     aspect-ratio: 16 / 9;
@@ -288,6 +286,16 @@ const spotlightProjects = await Promise.all(
     object-fit: cover;
     object-position: top center;
     display: block;
+  }
+
+  .spotlight-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-md);
+  }
+  .spotlight-card:last-child .spotlight-body {
+    padding-right: 0;
   }
 
   .spotlight-title {
@@ -312,6 +320,7 @@ const spotlightProjects = await Promise.all(
     font-size: 0.875rem;
     color: var(--color-muted);
     opacity: 0.5;
+    margin-top: auto;
   }
 
   /* ── About ── */
