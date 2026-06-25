@@ -1,0 +1,48 @@
+---
+import Nav from '../components/Nav.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <div class="container footer-inner">
+        <span>© 2024 Your Name</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  main {
+    min-height: calc(100vh - 56px - 64px);
+  }
+  footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-xl);
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+</style>

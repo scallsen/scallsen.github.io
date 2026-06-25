@@ -1,5 +1,6 @@
-._*
+dist/
+.output/
+node_modules/
+.astro/
+.env
 .DS_Store
-Thumbs.db
-_site
-Gemfile.lock

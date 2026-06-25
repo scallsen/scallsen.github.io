@@ -1,0 +1,100 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  company: string;
+  year: string;
+  description: string;
+}
+const { title, company, year, description } = Astro.props;
+---
+<Base title={`${title} — Your Name`} description={description}>
+  <article class="case-study">
+    <header class="case-study-header container">
+      <div class="case-study-meta">
+        <span>{company}</span>
+        <span>{year}</span>
+      </div>
+      <h1>{title}</h1>
+      <p class="case-study-lead">{description}</p>
+    </header>
+
+    <div class="case-study-body container">
+      <slot />
+    </div>
+
+    <nav class="case-study-nav container">
+      <a href="/#work">← Back to work</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .case-study-header {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-lg);
+  }
+  .case-study-meta {
+    display: flex;
+    gap: var(--space-sm);
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+  }
+  .case-study-header h1 {
+    margin-bottom: var(--space-sm);
+  }
+  .case-study-lead {
+    font-size: 1.125rem;
+    color: var(--color-muted);
+    max-width: 560px;
+  }
+
+  /* Prose styles scoped to body */
+  .case-study-body :global(h2) {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+  .case-study-body :global(h3) {
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+    color: var(--color-muted);
+  }
+  .case-study-body :global(p) {
+    margin-bottom: var(--space-sm);
+    line-height: 1.75;
+  }
+
+  /* Image placeholder */
+  .case-study-body :global(.img-placeholder) {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--color-border);
+    margin-block: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .case-study-nav {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.9375rem;
+  }
+  .case-study-nav a {
+    text-decoration: none;
+    color: var(--color-muted);
+  }
+  .case-study-nav a:hover {
+    color: var(--color-text);
+    opacity: 1;
+  }
+</style>
