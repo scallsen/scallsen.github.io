@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+
 async function getLastCommitDate(repo: string): Promise<Date | null> {
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`, {
@@ -43,87 +44,120 @@ const spotlightProjects = await Promise.all(
 );
 ---
 <Base title="Your Name — Senior UX Designer">
+
   <!-- Hero -->
-  <section class="hero container">
-    <h1>Your Name</h1>
-    <p class="hero-title">Senior UX Designer</p>
-    <p class="hero-statement">I design commerce experiences that help merchants grow and customers feel understood.</p>
+  <section class="hero">
+    <div class="container">
+      <h1>Your Name</h1>
+      <p class="hero-title">Senior UX Designer</p>
+      <p class="hero-statement">I design commerce experiences that help merchants grow and customers feel understood.</p>
+    </div>
   </section>
 
   <!-- Currently Building -->
   {spotlightProjects.length > 0 && (
-    <section class="spotlight container">
-      <h2 class="section-label">Currently Building</h2>
-      {spotlightProjects.map(({ project: p, freshness }) => {
-        const href = p.data.external ?? `/work/${p.slug}`;
-        const isExternal = !!p.data.external;
-        return (
-          <a href={href} class="spotlight-card" target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
-            <div class="spotlight-header">
-              <h3 class="spotlight-title">{p.data.title}</h3>
-              {freshness && <span class="spotlight-freshness">{freshness}</span>}
-            </div>
-            <p class="spotlight-desc">{p.data.description}</p>
-            <span class="spotlight-cta">{isExternal ? 'Visit →' : 'View →'}</span>
-          </a>
-        );
-      })}
+    <section class="spotlight">
+      <div class="container">
+        <div class="row">
+          <div class="row-label">
+            <span class="section-label">Currently Building</span>
+          </div>
+          <div class="row-content spotlight-grid">
+            {spotlightProjects.map(({ project: p, freshness }) => {
+              const href = p.data.external ?? `/work/${p.slug}`;
+              const isExternal = !!p.data.external;
+              return (
+                <a href={href} class="spotlight-card" target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+                  <h3 class="spotlight-title">{p.data.title}</h3>
+                  {freshness && <span class="spotlight-freshness">{freshness}</span>}
+                  <p class="spotlight-desc">{p.data.description}</p>
+                  <span class="spotlight-cta">{isExternal ? 'Visit →' : 'View →'}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </section>
   )}
 
-  <!-- Work -->
-  <section class="work container" id="work">
-    <h2 class="section-label">Case Studies</h2>
-    {caseStudies.map((p) => (
-      <ProjectCard
-        title={p.data.title}
-        company={p.data.company}
-        year={p.data.year}
-        description={p.data.description}
-        slug={p.slug}
-        external={p.data.external}
-      />
-    ))}
+  <!-- Case Studies -->
+  <section class="work" id="work">
+    <div class="container">
+      <div class="row">
+        <div class="row-label">
+          <span class="section-label">Case Studies</span>
+        </div>
+        <div class="row-content">
+          {caseStudies.map((p) => (
+            <ProjectCard
+              title={p.data.title}
+              company={p.data.company}
+              year={p.data.year}
+              description={p.data.description}
+              slug={p.slug}
+              external={p.data.external}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Personal Projects -->
   {personalProjects.length > 0 && (
-    <section class="personal container">
-      <h2 class="section-label">Personal</h2>
-      {personalProjects.map((p) => (
-        <ProjectCard
-          title={p.data.title}
-          company={p.data.company}
-          year={p.data.year}
-          description={p.data.description}
-          slug={p.slug}
-          external={p.data.external}
-        />
-      ))}
+    <section class="personal">
+      <div class="container">
+        <div class="row">
+          <div class="row-label">
+            <span class="section-label">Personal</span>
+          </div>
+          <div class="row-content">
+            {personalProjects.map((p) => (
+              <ProjectCard
+                title={p.data.title}
+                company={p.data.company}
+                year={p.data.year}
+                description={p.data.description}
+                slug={p.slug}
+                external={p.data.external}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )}
 
-  <!-- About blurb -->
-  <section class="about-blurb container" id="about">
-    <h2 class="section-label">About</h2>
-    <p>
-      I'm a product designer with seven years at Shopify, where I grew from intern to senior designer on the
-      fulfillment and commerce infrastructure teams. I'm based in Tokyo and currently open to new opportunities.
-    </p>
-    <p class="contact-line">
-      <a href="mailto:hello@yourname.com">hello@yourname.com</a>
-    </p>
+  <!-- About -->
+  <section class="about-blurb" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="row-label">
+          <span class="section-label">About</span>
+        </div>
+        <div class="row-content">
+          <p>
+            I'm a product designer with seven years at Shopify, where I grew from intern to senior designer on the
+            fulfillment and commerce infrastructure teams. I'm based in Tokyo and currently open to new opportunities.
+          </p>
+          <p class="contact-line">
+            <a href="mailto:hello@yourname.com">hello@yourname.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
   </section>
+
 </Base>
 
 <style>
+  /* ── Hero ── */
   .hero {
     padding-top: var(--space-xl);
     padding-bottom: var(--space-xl);
   }
-  .hero h1 {
-    margin-bottom: var(--space-xs);
-  }
+  .hero h1 { margin-bottom: var(--space-xs); }
   .hero-title {
     font-size: 1.25rem;
     color: var(--color-muted);
@@ -135,79 +169,101 @@ const spotlightProjects = await Promise.all(
     max-width: 480px;
     line-height: 1.65;
   }
+
+  /* ── Full-width section borders ── */
+  .spotlight,
+  .work,
+  .personal,
+  .about-blurb {
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* ── Two-column grid row ── */
+  .row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+  }
+
+  .row-label {
+    padding: var(--space-md) var(--space-md) var(--space-md) 0;
+  }
+
   .section-label {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-muted);
-    margin-bottom: var(--space-md);
   }
-  .spotlight {
-    padding-bottom: var(--space-lg);
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-lg);
+
+  .row-content {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-md);
+    padding-block: var(--space-md);
   }
+
+  /* Card lists: borders extend to the column divider; cards carry their own left padding */
+  .work .row-content,
+  .personal .row-content {
+    padding-left: 0;
+    padding-block: 0;
+  }
+  .work .row-content :global(.card),
+  .personal .row-content :global(.card) {
+    padding-left: var(--space-md);
+  }
+
+  /* ── Currently Building: sub-grid in content column ── */
+  .spotlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+  }
+
   .spotlight-card {
     display: block;
-    padding: var(--space-md) 0;
-    border-top: 1px solid var(--color-border);
+    padding: var(--space-md);
     text-decoration: none;
   }
   .spotlight-card:last-child {
-    border-bottom: 1px solid var(--color-border);
+    padding-right: 0;
   }
-  .spotlight-card:hover .spotlight-cta {
-    opacity: 1;
+  .spotlight-card + .spotlight-card {
+    border-left: 1px solid var(--color-border);
   }
-  .spotlight-header {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-xs);
-  }
+  .spotlight-card:hover .spotlight-cta { opacity: 1; }
+
   .spotlight-title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-text);
+    margin-bottom: var(--space-xs);
   }
   .spotlight-freshness {
-    font-size: 0.8125rem;
+    display: block;
+    font-size: 0.75rem;
     color: var(--color-muted);
+    margin-bottom: var(--space-sm);
   }
   .spotlight-desc {
     font-size: 0.9375rem;
     color: var(--color-muted);
     margin-bottom: var(--space-sm);
-    max-width: 560px;
+    line-height: 1.55;
   }
   .spotlight-cta {
     font-size: 0.875rem;
     color: var(--color-muted);
     opacity: 0.5;
   }
-  .work {
-    padding-bottom: var(--space-lg);
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-lg);
-  }
-  .personal {
-    padding-bottom: var(--space-xl);
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-lg);
-  }
-  .about-blurb {
-    padding-bottom: var(--space-xl);
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-lg);
-  }
-  .about-blurb p {
-    max-width: 520px;
+
+  /* ── About ── */
+  .about-blurb .row-content p {
+    max-width: 460px;
     line-height: 1.75;
     margin-bottom: var(--space-sm);
   }
   .contact-line a {
-    font-size: 1rem;
     color: var(--color-text);
   }
 </style>
