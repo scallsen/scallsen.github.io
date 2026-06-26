@@ -7,5 +7,5 @@ order: 4
 category: personal
 spotlight: true
 github: "scallsen/japanese-study"
-external: "https://japanese-study-zeta.vercel.app/"
+external: "https://japanese-study.scallsen.ca/"
 ---
