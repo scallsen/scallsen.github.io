@@ -91,5 +91,6 @@ for (const { github } of entries) {
   }
 }
 
+await mkdir(dirname(cachePath), { recursive: true });
 await writeFile(cachePath, JSON.stringify(cache, null, 2) + '\n');
 console.log('commit-cache.json updated');
