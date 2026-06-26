@@ -7,5 +7,5 @@ order: 3
 category: personal
 spotlight: true
 github: "scallsen/katsuyou-drill"
-external: "https://scallsen.ca/katsuyou-drill/"
+external: "https://scallsen.github.io/katsuyou-drill/"
 ---
