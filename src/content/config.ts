@@ -12,6 +12,8 @@ const work = defineCollection({
     category: z.enum(['case-study', 'personal']).default('case-study'),
     spotlight: z.boolean().optional(),
     github: z.string().optional(),
+    availableOnRequest: z.boolean().optional(),
+    thumbnail: z.string().optional(),
   }),
 });
 

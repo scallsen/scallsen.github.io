@@ -69,6 +69,12 @@ p  { font-size: 1rem; color: var(--color-muted); }
   padding-inline: var(--space-md);
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding-inline: var(--space-sm);
+  }
+}
+
 /* Divider */
 hr {
   border: none;
