@@ -6,4 +6,5 @@ description: "Redesigned Shopify's buy-online-pickup-in-store system to support 
 order: 1
 category: case-study
 availableOnRequest: true
+thumbnail: "/images/Pickup Hero.png"
 ---

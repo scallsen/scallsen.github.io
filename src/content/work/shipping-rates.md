@@ -6,4 +6,5 @@ description: "Redesigned how shipping rates are presented in Shopify's admin—m
 order: 2
 category: case-study
 availableOnRequest: true
+thumbnail: "/images/Shipping Option Hero.png"
 ---
