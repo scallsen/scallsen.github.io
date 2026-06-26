@@ -6,7 +6,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = Astro.props;
+const { title, description = 'Portfolio of Simon Callsen, Senior UX Designer.' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -28,7 +28,7 @@ const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = A
     </main>
     <footer>
       <div class="container footer-inner">
-        <span>© 2024 Your Name</span>
+        <span>© 2026 Simon Callsen</span>
         <div class="theme-toggle" role="group" aria-label="Color theme">
           <button data-theme-set="light">light</button>
           <button data-theme-set="dark">dark</button>
@@ -66,7 +66,6 @@ const { title, description = 'Portfolio of Your Name, Senior UX Designer.' } = A
   }
   footer {
     border-top: 1px solid var(--color-border);
-    margin-top: var(--space-xl);
   }
   .footer-inner {
     display: flex;

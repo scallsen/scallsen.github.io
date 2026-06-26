@@ -4,6 +4,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import commitCache from '../data/commit-cache.json';
 
 async function getLastCommitDate(repo: string): Promise<Date | null> {
   try {
@@ -41,8 +42,10 @@ const spotlightProjects = await Promise.all(
     .filter((p) => p.data.spotlight)
     .map(async (p) => {
       const lastCommit = p.data.github ? await getLastCommitDate(p.data.github) : null;
+      const cachedDate = p.data.github ? (commitCache as Record<string, string>)[p.data.github] : null;
+      const resolvedDate = lastCommit ?? (cachedDate ? new Date(cachedDate) : null);
       const hasScreenshot = existsSync(join(process.cwd(), 'public', 'screenshots', `${p.slug}.png`));
-      return { project: p, freshness: lastCommit ? relativeTime(lastCommit) : null, hasScreenshot };
+      return { project: p, freshness: resolvedDate ? relativeTime(resolvedDate) : null, hasScreenshot };
     })
 );
 ---
@@ -53,14 +56,19 @@ const spotlightProjects = await Promise.all(
     <div class="container">
       <div class="row">
         <div class="row-label hero-label">
-          <img src="/pfp.jpeg" alt="Simon Callsen" class="pfp" />
+          <img src="/pfp.png" alt="Simon Callsen" class="pfp" />
         </div>
         <div class="row-content hero-content">
           <h1>Simon Callsen</h1>
           <p class="hero-title">Senior UX Designer</p>
         </div>
       </div>
-      <p class="hero-statement">I design commerce experiences that help merchants grow and customers feel understood.</p>
+      <p class="hero-statement">7 years at Shopify – now building my own tools in Tokyo.</p>
+      <div class="hero-links">
+        <a href="https://www.linkedin.com/in/scallsen/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/scallsen" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:simon.callsen@gmail.com">Email</a>
+      </div>
     </div>
   </section>
 
@@ -114,6 +122,8 @@ const spotlightProjects = await Promise.all(
               description={p.data.description}
               slug={p.slug}
               external={p.data.external}
+              availableOnRequest={p.data.availableOnRequest}
+              thumbnail={p.data.thumbnail}
             />
           ))}
         </div>
@@ -155,11 +165,19 @@ const spotlightProjects = await Promise.all(
         </div>
         <div class="row-content">
           <p>
-            I'm a product designer with seven years at Shopify, where I grew from intern to senior designer on the
-            fulfillment and commerce infrastructure teams. I'm based in Tokyo and currently open to new opportunities.
+            I spent seven years at Shopify designing shipping and fulfillment software, starting as an intern and
+            leaving as a senior designer.
+          </p>
+          <p>
+            I enjoyed working on larger problems that spanned multiple teams—taking them from initial pitch through
+            to execution.
+          </p>
+          <p>
+            I'm currently based in Tokyo, going to Japanese language school, and building my own tools on the side.
+            I'm looking for a product design role at an English-friendly company in Japan.
           </p>
           <p class="contact-line">
-            <a href="mailto:hello@yourname.com">hello@yourname.com</a>
+            <a href="mailto:simon.callsen@gmail.com">simon.callsen@gmail.com</a>
           </p>
         </div>
       </div>
@@ -206,6 +224,23 @@ const spotlightProjects = await Promise.all(
     line-height: 1.65;
     padding-left: calc(160px + var(--space-md));
   }
+  .hero-links {
+    display: flex;
+    gap: var(--space-md);
+    padding-left: calc(160px + var(--space-md));
+    margin-top: var(--space-sm);
+  }
+  .hero-links a {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1px;
+  }
+  .hero-links a:hover {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+  }
 
   /* ── Full-width section borders ── */
   .spotlight,
@@ -213,6 +248,12 @@ const spotlightProjects = await Promise.all(
   .personal,
   .about-blurb {
     border-top: 1px solid var(--color-border);
+  }
+
+  /* Offset anchor scroll for sticky nav */
+  .work,
+  .about-blurb {
+    scroll-margin-top: 56px;
   }
 
   /* ── Two-column grid row ── */
@@ -244,10 +285,12 @@ const spotlightProjects = await Promise.all(
   .personal .row-content {
     padding-left: 0;
     padding-block: 0;
+    border-right: 1px solid var(--color-border);
   }
-  .work .row-content :global(.card),
-  .personal .row-content :global(.card) {
+  .work .row-content :global(.card-body),
+  .personal .row-content :global(.card-body) {
     padding-left: var(--space-md);
+    padding-right: var(--space-md);
   }
   .work .row-content :global(.card:first-child),
   .personal .row-content :global(.card:first-child) {
@@ -263,6 +306,7 @@ const spotlightProjects = await Promise.all(
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 0;
+    border-right: 1px solid var(--color-border);
   }
 
   .spotlight-card {
@@ -278,7 +322,7 @@ const spotlightProjects = await Promise.all(
   .spotlight-preview {
     overflow: hidden;
     border-bottom: 1px solid var(--color-border);
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
   }
   .spotlight-img {
     width: 100%;
@@ -293,9 +337,6 @@ const spotlightProjects = await Promise.all(
     flex-direction: column;
     flex: 1;
     padding: var(--space-md);
-  }
-  .spotlight-card:last-child .spotlight-body {
-    padding-right: 0;
   }
 
   .spotlight-title {
@@ -331,5 +372,83 @@ const spotlightProjects = await Promise.all(
   }
   .contact-line a {
     color: var(--color-text);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    /* Section label: larger, no allcaps, black */
+    .section-label {
+      font-size: 1.125rem;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--color-text);
+    }
+
+    /* Collapse two-column rows to single column */
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .row-label {
+      padding: var(--space-md) 0 var(--space-sm) 0;
+    }
+    .row-content {
+      border-left: none;
+      padding-left: 0;
+      padding-top: 0;
+    }
+    .work .row-content,
+    .personal .row-content {
+      border-right: none;
+    }
+
+    /* Tighter vertical padding on hero and spotlight */
+    .hero {
+      padding-bottom: var(--space-md);
+    }
+    .spotlight-body {
+      padding-top: var(--space-sm);
+      padding-bottom: var(--space-md);
+    }
+
+    /* Hero: vertical stack — pfp → name/title → statement */
+    .hero-label {
+      padding-top: 0;
+      padding-bottom: var(--space-sm);
+    }
+    .pfp {
+      width: 80px;
+    }
+    .hero-statement {
+      padding-left: 0;
+    }
+    .hero-links {
+      padding-left: 0;
+    }
+
+    /* Stack spotlight cards vertically */
+    .spotlight-grid {
+      grid-template-columns: 1fr;
+      border-right: none;
+    }
+    .spotlight-card + .spotlight-card {
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* Align card/spotlight text with images — let container padding do the work */
+    .work .row-content :global(.card-body),
+    .personal .row-content :global(.card-body) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    /* Tighten gap between thumbnail and card text */
+    .work .row-content :global(.card-thumbnail + .card-body),
+    .personal .row-content :global(.card-thumbnail + .card-body) {
+      padding-top: var(--space-sm);
+    }
+    .spotlight-body {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 </style>

@@ -6,40 +6,98 @@ interface Props {
   description: string;
   slug?: string;
   external?: string;
+  availableOnRequest?: boolean;
+  thumbnail?: string;
 }
-const { title, company, year, description, slug, external } = Astro.props;
+const { title, company, year, description, slug, external, availableOnRequest, thumbnail } = Astro.props;
 const href = external ?? `/work/${slug}`;
 const isExternal = !!external;
+
+const logoMap: Record<string, string> = {
+  'Shopify': '/logos/shopify.svg',
+};
+const logoSrc = logoMap[company] ?? null;
 ---
-<a href={href} class="card" target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
-  <div class="card-meta">
-    <span class="card-company">{company}</span>
-    <span class="card-year">{year}</span>
+{availableOnRequest ? (
+  <div class="card card--no-link">
+    {thumbnail && (
+      <div class="card-thumbnail">
+        <img src={thumbnail} alt={title} class="card-thumbnail-img" />
+      </div>
+    )}
+    <div class="card-body">
+      <div class="card-meta">
+        {logoSrc && <img src={logoSrc} alt={company} class="card-logo" />}
+        <span class="card-company">{company}</span>
+        <span class="card-year">{year}</span>
+      </div>
+      <h3 class="card-title">{title}</h3>
+      <p class="card-desc">{description}</p>
+      <span class="card-cta">Available on request</span>
+    </div>
   </div>
-  <h3 class="card-title">{title}</h3>
-  <p class="card-desc">{description}</p>
-  <span class="card-cta">{isExternal ? 'Visit →' : 'View case study →'}</span>
-</a>
+) : (
+  <a href={href} class="card" target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+    {thumbnail && (
+      <div class="card-thumbnail">
+        <img src={thumbnail} alt={title} class="card-thumbnail-img" />
+      </div>
+    )}
+    <div class="card-body">
+      <div class="card-meta">
+        {logoSrc && <img src={logoSrc} alt={company} class="card-logo" />}
+        <span class="card-company">{company}</span>
+        <span class="card-year">{year}</span>
+      </div>
+      <h3 class="card-title">{title}</h3>
+      <p class="card-desc">{description}</p>
+      <span class="card-cta">{isExternal ? 'Visit →' : 'View case study →'}</span>
+    </div>
+  </a>
+)}
 
 <style>
   .card {
     display: block;
-    padding: var(--space-md) 0;
+    padding: 0;
     border-top: 1px solid var(--color-border);
     text-decoration: none;
+  }
+  .card-thumbnail {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .card-thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+  .card-body {
+    padding: var(--space-md) 0;
   }
   .card:last-child {
     border-bottom: 1px solid var(--color-border);
   }
-  .card:hover .card-cta {
+  a.card:hover .card-cta {
     opacity: 1;
   }
   .card-meta {
     display: flex;
-    gap: var(--space-sm);
+    align-items: center;
+    gap: var(--space-xs);
     font-size: 0.8125rem;
     color: var(--color-muted);
     margin-bottom: var(--space-xs);
+  }
+  .card-logo {
+    width: 22px;
+    height: 22px;
+    display: block;
+    flex-shrink: 0;
+    margin-right: 4px;
   }
   .card-title {
     font-size: 1.125rem;
