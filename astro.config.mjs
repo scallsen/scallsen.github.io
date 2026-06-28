@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://scallsen.github.io',
+  site: 'https://scallsen.ca',
+  integrations: [sitemap()],
 });

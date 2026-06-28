@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Page not found — Simon Callsen" description="This page doesn't exist.">
+  <section class="not-found">
+    <div class="container">
+      <p class="code">404</p>
+      <h1>Page not found</h1>
+      <p class="message">The page you're looking for doesn't exist.</p>
+      <a href="/">Back to home</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    padding-block: var(--space-xl);
+  }
+  .code {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-bottom: var(--space-sm);
+  }
+  .not-found h1 {
+    margin-bottom: var(--space-sm);
+  }
+  .message {
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+  }
+  .not-found a {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1px;
+  }
+  .not-found a:hover {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+  }
+</style>
